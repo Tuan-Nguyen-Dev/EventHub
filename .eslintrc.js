@@ -2,7 +2,9 @@ module.exports = {
   root: true,
   extends: '@react-native',
   rules: {
-    'prettier/prettier': 0,
-    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
+    'prettier/prettier': 'off',
+    'react-hooks/exhaustive-deps': 'warn',
+    'react-native/no-inline-styles': 'off',
   },
 };

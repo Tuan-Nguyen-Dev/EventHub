@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { appColors } from '../constants/appColor';
+import { fontFamilies } from '../constants/fontfamilies';
 
 export const globalStyles = StyleSheet.create({
     container: {
@@ -10,6 +11,7 @@ export const globalStyles = StyleSheet.create({
     text: {
         fontSize: 14,
         color: appColors.text,
+        fontFamily: fontFamilies.regular
     },
 
     button: {
