@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, {useState} from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {globalStyles} from '../../styles/globalStyles';
@@ -18,8 +17,7 @@ const OnbroadingScreen = ({navigation}: any) => {
         loop={false}
         onIndexChanged={num => setIndex(num)}
         index={index}
-        activeDotColor={appColors.white}
-        dotColor={appColors.gray2}>
+        activeDotColor={appColors.white}>
         <Image
           source={require('../../assets/images/onboarding-1.png')}
           style={{

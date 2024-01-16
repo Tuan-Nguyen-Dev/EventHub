@@ -11,10 +11,11 @@ interface Props {
   flex?: number;
   font?: string;
   styles?: StyleProp<TextStyle>;
+  title?: boolean;
 }
 
 const TextComponent = (props: Props) => {
-  const {text, color, flex, size, font, styles} = props;
+  const {text, color, flex, size, font, styles, title} = props;
 
   return (
     <Text
@@ -23,8 +24,8 @@ const TextComponent = (props: Props) => {
         {
           color: color ?? appColors.text,
           flex: flex ?? 0,
-          fontSize: size ?? 14,
-          fontFamily: font ?? fontFamilies.regular,
+          fontSize: size ?? title ? 24 : 14,
+          fontFamily: font ?? title ? fontFamilies.bold : fontFamilies.regular,
         },
         styles,
       ]}>
