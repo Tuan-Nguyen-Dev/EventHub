@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleProp, Text, TextStyle} from 'react-native';
 import {appColors} from '../constants/appColor';
-import {fontFamilies} from '../constants/fontfamilies';
+import {fontFamilies} from '../constants/fontFamilies';
 import {globalStyles} from '../styles/globalStyles';
 
 interface Props {
