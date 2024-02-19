@@ -6,21 +6,15 @@ import {globalStyles} from '../../styles/globalStyles';
 import App from '../../../App';
 import {appColors} from '../../constants/appColor';
 import {Lock, Sms} from 'iconsax-react-native';
+import ContainerComponent from '../../components/ContainerComponent';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   return (
-    <View
-      style={[
-        globalStyles.container,
-        {
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: 20,
-        },
-      ]}>
-      <InputComponent
+    <ContainerComponent isImageBackground>
+      <Text>Helll</Text>
+      {/* <InputComponent
         value={email}
         onChange={val => setEmail(val)}
         placeholder="Email"
@@ -35,8 +29,8 @@ const LoginScreen = () => {
         isPassword
         allowClear
         affix={<Lock size={22} color={appColors.gray} />}
-      />
-    </View>
+      /> */}
+    </ContainerComponent>
   );
 };
 
