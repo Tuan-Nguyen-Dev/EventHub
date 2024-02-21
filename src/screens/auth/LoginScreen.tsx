@@ -1,11 +1,5 @@
-import {View, Text, Button} from 'react-native';
 import React, {useState} from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {ButtonComponent, InputComponent} from '../../components';
-import {globalStyles} from '../../styles/globalStyles';
-import App from '../../../App';
-import {appColors} from '../../constants/appColor';
-import {Lock, Sms} from 'iconsax-react-native';
+import {Text} from 'react-native';
 import ContainerComponent from '../../components/ContainerComponent';
 
 const LoginScreen = () => {
