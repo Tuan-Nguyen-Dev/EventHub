@@ -13,8 +13,9 @@ import {Lock, Sms} from 'iconsax-react-native';
 import {appColors} from '../../constants/appColor';
 import {Switch} from 'react-native';
 import SocialComponent from './components/SocialComponent';
+import {fontFamilies} from '../../constants/fontFamilies';
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation}: any) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isRemember, setIsRemember] = useState(false);
@@ -61,7 +62,7 @@ const LoginScreen = () => {
           </RowComponent>
           <ButtonComponent
             text="Forget Password ?"
-            onPress={() => {}}
+            onPress={() => navigation.navigate('ForgotPasswordScreen')}
             type="text"
           />
         </RowComponent>
@@ -75,8 +76,12 @@ const LoginScreen = () => {
 
       <SectionComponent>
         <RowComponent justify="center">
-          <TextComponent text="Don’t have an account? Sign up? " />
-          <ButtonComponent type="link" text="Sign in" />
+          <TextComponent text="Don’t have an account? " />
+          <ButtonComponent
+            type="link"
+            text="Sign up"
+            onPress={() => navigation.navigate('SignUpScreen')}
+          />
         </RowComponent>
       </SectionComponent>
     </ContainerComponent>
