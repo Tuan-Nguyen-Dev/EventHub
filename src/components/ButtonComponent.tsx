@@ -6,10 +6,10 @@ import {
   TouchableOpacity,
   ViewStyle,
 } from 'react-native';
+import {fontFamilies} from '../constants/fontFamilies';
 import {TextComponent} from '.';
 import {globalStyles} from '../styles/globalStyles';
 import {appColors} from '../constants/appColor';
-import {fontFamilies} from '../constants/fontfamilies';
 
 interface Props {
   icons?: ReactNode;
@@ -53,17 +53,19 @@ const ButtonComponent = (props: Props) => {
           textStyle,
           {
             marginLeft: icons ? 12 : 0,
+            fontSize: 16,
           },
           styles,
         ]}
         flex={icons && iconFlex === 'right' ? 1 : 0}
+        font={fontFamilies.medium}
       />
       {icons && iconFlex === 'right' && icons}
     </TouchableOpacity>
   ) : (
     <TouchableOpacity>
       <TextComponent
-        text="Login"
+        text={text}
         color={type === 'link' ? appColors.link : appColors.text}
       />
     </TouchableOpacity>
