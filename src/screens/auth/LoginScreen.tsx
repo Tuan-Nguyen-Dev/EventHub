@@ -1,5 +1,9 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Lock, Sms} from 'iconsax-react-native';
 import React, {useState} from 'react';
-import {Image, Text} from 'react-native';
+import {Alert, Image, Switch} from 'react-native';
+import {useDispatch} from 'react-redux';
+import authticationAPI from '../../apis/authApi';
 import {
   ButtonComponent,
   ContainerComponent,
@@ -9,16 +13,40 @@ import {
   SpaceComponents,
   TextComponent,
 } from '../../components';
-import {Lock, Sms} from 'iconsax-react-native';
 import {appColors} from '../../constants/appColor';
-import {Switch} from 'react-native';
+import {addAuth} from '../../redux/reducers/authReducer';
+import {Validate} from '../../utils/validate';
 import SocialComponent from './components/SocialComponent';
-import {fontFamilies} from '../../constants/fontFamilies';
 
 const LoginScreen = ({navigation}: any) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isRemember, setIsRemember] = useState(false);
+  const [isRemember, setIsRemember] = useState(true);
+
+  const dispatch = useDispatch();
+
+  const handleLogin = async () => {
+    const emailValidation = Validate.email(email);
+
+    if (emailValidation) {
+      try {
+        const res = await authticationAPI.HandleAuthentication(
+          '/login',
+          {email, password},
+          'post',
+        );
+        dispatch(addAuth(res.data));
+        await AsyncStorage.setItem(
+          'auth',
+          isRemember ? JSON.stringify(res.data) : email,
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      Alert.alert('Email is not valid');
+    }
+  };
 
   return (
     <ContainerComponent isScroll isImageBackground>
@@ -58,6 +86,7 @@ const LoginScreen = ({navigation}: any) => {
               value={isRemember}
               onChange={() => setIsRemember(!isRemember)}
             />
+            <SpaceComponents width={4} />
             <TextComponent text="Remember Me" />
           </RowComponent>
           <ButtonComponent
@@ -69,7 +98,7 @@ const LoginScreen = ({navigation}: any) => {
       </SectionComponent>
       <SpaceComponents height={15} />
       <SectionComponent>
-        <ButtonComponent text="SIGN IN" type="primary" />
+        <ButtonComponent onPress={handleLogin} text="SIGN IN" type="primary" />
       </SectionComponent>
 
       <SocialComponent />

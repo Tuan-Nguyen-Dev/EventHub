@@ -17,6 +17,7 @@ const SocialComponent = () => {
         text="OR"
         color={appColors.gray4}
         font={fontFamilies.medium}
+        // title
         size={16}
         styles={{textAlign: 'center'}}
       />

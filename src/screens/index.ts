@@ -9,5 +9,4 @@ export {
     HomeScreen,
     LoginScreen,
     SplashScreen,
-
 };
