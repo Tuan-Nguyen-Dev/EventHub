@@ -76,7 +76,7 @@ android {
 
     namespace "com.evenhub"
     defaultConfig {
-        applicationId "com.evenhub"
+        applicationId "com.evenhubt"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

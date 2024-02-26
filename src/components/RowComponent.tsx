@@ -9,7 +9,8 @@ interface Props {
     | 'flex-end'
     | 'space-between'
     | 'space-around'
-    | 'space-evenly';
+    | 'space-evenly'
+    | undefined;
   style?: StyleProp<ViewStyle>;
   children: ReactNode;
   onPress?: () => void;
@@ -18,7 +19,11 @@ interface Props {
 const RowComponent = (props: Props) => {
   const {justify, style, onPress, children} = props;
 
-  const localStyles = [globalStyles.row, {justifyContent: justify}, style];
+  const localStyles = [
+    globalStyles.row,
+    {justifyContent: justify ?? 'center'},
+    style,
+  ];
 
   return onPress ? (
     <TouchableOpacity

@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Lock, Sms} from 'iconsax-react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Alert, Image, Switch} from 'react-native';
 import {useDispatch} from 'react-redux';
 import authticationAPI from '../../apis/authApi';
@@ -22,8 +22,19 @@ const LoginScreen = ({navigation}: any) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isRemember, setIsRemember] = useState(true);
+  const [isDisable, setIsDisable] = useState(true);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const emailValidation = Validate.email(email);
+
+    if (!email || !password || !emailValidation) {
+      setIsDisable(true);
+    } else {
+      setIsDisable(false);
+    }
+  }, [email, password]);
 
   const handleLogin = async () => {
     const emailValidation = Validate.email(email);
@@ -98,7 +109,12 @@ const LoginScreen = ({navigation}: any) => {
       </SectionComponent>
       <SpaceComponents height={15} />
       <SectionComponent>
-        <ButtonComponent onPress={handleLogin} text="SIGN IN" type="primary" />
+        <ButtonComponent
+          disabled={isDisable}
+          onPress={handleLogin}
+          text="SIGN IN"
+          type="primary"
+        />
       </SectionComponent>
 
       <SocialComponent />

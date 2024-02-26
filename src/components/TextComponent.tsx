@@ -26,7 +26,7 @@ const TextComponent = (props: Props) => {
         {
           color: color ?? appColors.text,
           flex: flex ?? 0,
-          fontSize: size ? size : title ? 24 : fonSizeDefault,
+          fontSize: size ? size - 2 : title ? 24 : fonSizeDefault,
           fontFamily: font
             ? font
             : title
