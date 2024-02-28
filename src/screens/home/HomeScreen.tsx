@@ -6,27 +6,56 @@ import {
   Sort,
 } from 'iconsax-react-native';
 import React from 'react';
-import {Platform, StatusBar, TouchableOpacity, View} from 'react-native';
+import {
+  Button,
+  FlatList,
+  Platform,
+  ScrollView,
+  StatusBar,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   CategoriresList,
   CricleComponent,
+  EventItem,
   RowComponent,
   SpaceComponents,
+  TabBarComponent,
   TextComponent,
 } from '../../components';
 import {appColors} from '../../constants/appColor';
 import {fontFamilies} from '../../constants/fontFamilies';
-import {authSelector} from '../../redux/reducers/authReducer';
+import {authSelector, removeAuth} from '../../redux/reducers/authReducer';
 import {globalStyles} from '../../styles/globalStyles';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import TabComponent from '../../components/TagComponent';
 import TagComponent from '../../components/TagComponent';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {LoginManager} from 'react-native-fbsdk-next';
 
 const HomeScreen = ({navigation}: any) => {
   const dispatch = useDispatch();
 
   const auth = useSelector(authSelector);
+
+  const itemEvents = {
+    title: 'International Band Music Concert',
+    description:
+      "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
+    location: {
+      title: 'Title',
+      address: 'Ha Noi UUUUU',
+    },
+    user: [''],
+    imageUr: '',
+    authorId: '',
+    starAt: Date.now(),
+    endAt: Date.now(),
+    date: Date.now(),
+  };
 
   return (
     <View style={[globalStyles.container]}>
@@ -132,9 +161,30 @@ const HomeScreen = ({navigation}: any) => {
         <View style={{marginTop: 10}}>
           <CategoriresList isFill />
         </View>
-
-        <View style={{flex: 1}}></View>
       </View>
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{flex: 1, marginTop: 16}}>
+        <TabBarComponent title="Upcoming Events" onPress={() => {}} />
+        <FlatList
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          data={Array.from({length: 5})}
+          renderItem={({item, index}) => (
+            <EventItem type="card" key={index} item={itemEvents} />
+          )}
+        />
+      </ScrollView>
+      {/* <Button
+        title="LogOut"
+        onPress={async () => {
+          await AsyncStorage.clear();
+          await GoogleSignin.signOut();
+          dispatch(removeAuth({}));
+          LoginManager.logOut();
+        }}
+      /> */}
     </View>
   );
 };
