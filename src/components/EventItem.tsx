@@ -12,6 +12,7 @@ import RowComponent from './RowComponent';
 import SpaceComponents from './SpaceComponents';
 import TextComponent from './TextComponent';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {useNavigation} from '@react-navigation/native';
 interface Props {
   item: EventModel;
   type: 'card' | 'list';
@@ -19,11 +20,14 @@ interface Props {
 
 const EventItem = (props: Props) => {
   const {item, type} = props;
+  const navigation: any = useNavigation();
   return (
     <CartComponent
       isShawdown
       style={{width: appInfo.sizes.WIDTH * 0.7}}
-      onPress={() => {}}>
+      onPress={() => {
+        navigation.navigate('EventDetail', {item});
+      }}>
       <ImageBackground
         imageStyle={{resizeMode: 'cover', borderRadius: 12}}
         style={{flex: 1, padding: 10, marginBottom: 12, height: 130}}

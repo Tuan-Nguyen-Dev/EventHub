@@ -5,10 +5,12 @@ import {
   SearchNormal1,
   Sort,
 } from 'iconsax-react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Button,
   FlatList,
+  Image,
+  ImageBackground,
   Platform,
   ScrollView,
   StatusBar,
@@ -17,10 +19,12 @@ import {
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
+  CartComponent,
   CategoriresList,
   CricleComponent,
   EventItem,
   RowComponent,
+  SectionComponent,
   SpaceComponents,
   TabBarComponent,
   TextComponent,
@@ -35,11 +39,48 @@ import TagComponent from '../../components/TagComponent';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {LoginManager} from 'react-native-fbsdk-next';
-
+import GeoLocation from '@react-native-community/geolocation';
+import axios from 'axios';
+import {err} from 'react-native-svg';
+import {AddressModel} from '../../models/AddressModel';
 const HomeScreen = ({navigation}: any) => {
+  const [currenLocation, setCurrenLocation] = useState<AddressModel>();
+
   const dispatch = useDispatch();
 
   const auth = useSelector(authSelector);
+
+  useEffect(() => {
+    GeoLocation.getCurrentPosition(position => {
+      if (position.coords) {
+        reverseGeoLocation({
+          lat: position.coords.latitude,
+          long: position.coords.longitude,
+        });
+      }
+    });
+  }, []);
+
+  const reverseGeoLocation = async ({
+    lat,
+    long,
+  }: {
+    lat: number;
+    long: number;
+  }) => {
+    const api = `https://revgeocode.search.hereapi.com/v1/revgeocode?at=${lat},${long}&lang=vi-VI&apiKey=2avNGLusOpe6YcuFJ_rTfNp20Ccyds_R94d6cm0c_uY `;
+
+    try {
+      const res = await axios(api);
+      if (res && res.status === 200 && res.data) {
+        const item = res.data.items;
+        setCurrenLocation(item[0]);
+      }
+    } catch (error) {
+      console.log(err);
+    }
+  };
+  console.log(currenLocation);
 
   const itemEvents = {
     title: 'International Band Music Concert',
@@ -85,11 +126,14 @@ const HomeScreen = ({navigation}: any) => {
                   color={appColors.white}
                 />
               </RowComponent>
-              <TextComponent
-                text="New York, USA"
-                color={appColors.white}
-                font={fontFamilies.medium}
-              />
+
+              {currenLocation && (
+                <TextComponent
+                  text={`${currenLocation.address.city}, ${currenLocation.address.countryName}`}
+                  color={appColors.white}
+                  font={fontFamilies.medium}
+                />
+              )}
             </View>
 
             <CricleComponent styles={{backgroundColor: '#524CE0'}} size={36}>
@@ -165,8 +209,44 @@ const HomeScreen = ({navigation}: any) => {
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={{flex: 1, marginTop: 16}}>
+        style={{flex: 1, marginTop: Platform.OS === 'android' ? 22 : 18}}>
         <TabBarComponent title="Upcoming Events" onPress={() => {}} />
+        <FlatList
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          data={Array.from({length: 5})}
+          renderItem={({item, index}) => (
+            <EventItem type="card" key={index} item={itemEvents} />
+          )}
+        />
+        <SectionComponent>
+          <ImageBackground
+            source={require('../../assets/images/invite-image.png')}
+            style={{flex: 1, padding: 16, minHeight: 127}}
+            imageStyle={{flex: 1, resizeMode: 'cover', borderRadius: 12}}>
+            <TextComponent text="Invite your friends" title />
+            <TextComponent text="Get $20 for ticket" />
+            <RowComponent justify="flex-start">
+              <TouchableOpacity
+                style={[
+                  globalStyles.button,
+                  {
+                    marginTop: 12,
+                    backgroundColor: '#00F8FF',
+                    paddingHorizontal: 28,
+                  },
+                ]}>
+                <TextComponent
+                  text="INTIVE"
+                  font={fontFamilies.bold}
+                  color={appColors.white}
+                />
+              </TouchableOpacity>
+            </RowComponent>
+          </ImageBackground>
+        </SectionComponent>
+
+        <TabBarComponent title="Nearby You" onPress={() => {}} />
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}

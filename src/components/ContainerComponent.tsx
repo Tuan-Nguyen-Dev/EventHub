@@ -1,6 +1,7 @@
 import {
   ImageBackground,
   ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -49,6 +50,7 @@ const ContainerComponent = (props: Props) => {
               paddingVertical: 10,
               minWidth: 48,
               minHeight: 48,
+              justifyContent: 'flex-start',
             }}>
             {back && (
               <TouchableOpacity
@@ -58,7 +60,12 @@ const ContainerComponent = (props: Props) => {
               </TouchableOpacity>
             )}
             {title ? (
-              <TextComponent text={title} font={fontFamilies.medium} />
+              <TextComponent
+                size={16}
+                flex={1}
+                text={title}
+                font={fontFamilies.medium}
+              />
             ) : (
               <></>
             )}
@@ -79,7 +86,8 @@ const ContainerComponent = (props: Props) => {
     </ImageBackground>
   ) : (
     <SafeAreaView style={[globalStyles.container]}>
-      <View>{headerComponent()}</View>
+      <StatusBar barStyle={'dark-content'} />
+      <View style={{flex: 1}}>{headerComponent()}</View>
     </SafeAreaView>
   );
 };

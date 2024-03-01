@@ -9,7 +9,7 @@ export const globalStyles = StyleSheet.create({
     },
 
     text: {
-        fontSize: 14,
+        fontSize: 16,
         color: appColors.text,
         fontFamily: fontFamilies.regular,
     },
@@ -21,7 +21,7 @@ export const globalStyles = StyleSheet.create({
         backgroundColor: appColors.white,
         paddingHorizontal: 16,
         paddingVertical: 16,
-        minHeight: 56,
+        // minHeight: 56,
         flexDirection: 'row',
     },
     shadow: {
@@ -43,7 +43,7 @@ export const globalStyles = StyleSheet.create({
         justifyContent: "flex-start",
         alignItems: "center"
     },
-    inputContainer: {
+    iconContainer: {
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#3D56F0",
@@ -73,5 +73,27 @@ export const globalStyles = StyleSheet.create({
         margin: 0,
         padding: 0,
         justifyContent: 'center',
-    }
+        marginBottom: 0
+    },
+    inputContainer: {
+        flexDirection: 'row',
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: appColors.gray3,
+        width: '100%',
+        minHeight: 56,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 15,
+        backgroundColor: appColors.white,
+        marginBottom: 20,
+        paddingVertical: 14,
+    },
+    input: {
+        padding: 0,
+        margin: 0,
+        flex: 1,
+        // paddingHorizontal: 14,
+        color: appColors.text,
+    },
 });
