@@ -1,16 +1,17 @@
-import {View, Text} from 'react-native';
 import React, {useState} from 'react';
+import {useSelector} from 'react-redux';
 import {
   ButtonComponent,
   ContainerComponent,
   InputComponent,
+  RowComponent,
   SectionComponent,
+  SpaceComponents,
   TextComponent,
 } from '../components';
-import {useSelector} from 'react-redux';
-import {authSelector} from '../redux/reducers/authReducer';
-import {Autobrightness} from 'iconsax-react-native';
 import ChoiceLocationComponet from '../components/ChoiceLocationComponet';
+import {authSelector} from '../redux/reducers/authReducer';
+import DateTimePickerComponent from '../components/DateTimePickerComponent';
 
 const initValues = {
   title: '',
@@ -34,14 +35,14 @@ const AddNewScreen = () => {
     authorId: auth.id,
   });
 
-  const handleChangeValue = (key: string, value: string) => {
+  const handleChangeValue = (key: string, value: string | Date) => {
     const items = {...eventData};
     items[`${key}`] = value;
     setEventData(items);
   };
 
   const handleAddEvent = async () => {
-    console.log(eventData);
+    console.log('adadasd', eventData);
   };
 
   return (
@@ -63,6 +64,39 @@ const AddNewScreen = () => {
           numberOfLines={3}
           value={eventData.description}
           onChange={val => handleChangeValue('description', val)}
+        />
+
+        <RowComponent>
+          <DateTimePickerComponent
+            label="Start At :"
+            onSelect={val => handleChangeValue('starAt', val)}
+            selected={eventData.starAt}
+            type="time"
+          />
+          <SpaceComponents width={20} />
+          <DateTimePickerComponent
+            label="End At :"
+            onSelect={val => handleChangeValue('endAt', val)}
+            selected={eventData.endAt}
+            type="time"
+          />
+        </RowComponent>
+
+        <DateTimePickerComponent
+          label="Date :"
+          onSelect={val => handleChangeValue('date', val)}
+          selected={eventData.date}
+          type="date"
+        />
+
+        <InputComponent
+          allowClear
+          placeholder="Title Address"
+          numberOfLines={3}
+          value={eventData.location.title}
+          onChange={val =>
+            handleChangeValue('location', {...eventData.location, title: val})
+          }
         />
         <ChoiceLocationComponet />
       </SectionComponent>

@@ -43,12 +43,21 @@ import GeoLocation from '@react-native-community/geolocation';
 import axios from 'axios';
 import {err} from 'react-native-svg';
 import {AddressModel} from '../../models/AddressModel';
+import Geocoder from 'react-native-geocoding';
+
+Geocoder.init(process.env.MAP_API_KEY as string);
+
 const HomeScreen = ({navigation}: any) => {
   const [currenLocation, setCurrenLocation] = useState<AddressModel>();
 
   const dispatch = useDispatch();
 
   const auth = useSelector(authSelector);
+  // console.log('Map api', process.env.MAP_API_KEY);
+
+  useEffect(() => {
+    reverseGeoLocation({lat: 16.76896, long: 107.2696151});
+  }, []);
 
   useEffect(() => {
     GeoLocation.getCurrentPosition(position => {
@@ -80,7 +89,7 @@ const HomeScreen = ({navigation}: any) => {
       console.log(err);
     }
   };
-  console.log(currenLocation);
+  // console.log(currenLocation);
 
   const itemEvents = {
     title: 'International Band Music Concert',
