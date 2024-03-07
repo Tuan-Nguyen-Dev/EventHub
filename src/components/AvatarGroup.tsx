@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image} from 'react-native';
+import {Image, StyleProp, ViewStyle} from 'react-native';
 import {appColors} from '../constants/appColor';
 import {fontFamilies} from '../constants/fontFamilies';
 import RowComponent from './RowComponent';
@@ -8,14 +8,15 @@ import TextComponent from './TextComponent';
 
 interface Props {
   size?: number;
+  style?: StyleProp<ViewStyle>;
 }
 
 const AvatarGroup = (props: Props) => {
-  const {size} = props;
+  const {size, style} = props;
   const photoUrl =
     'https://khoinguonsangtao.vn/wp-content/uploads/2022/09/hinh-anh-gai-xinh-deo-kinh.jpg';
   return (
-    <RowComponent justify="flex-start" style={{marginVertical: 12}}>
+    <RowComponent justify="flex-start" style={[{marginVertical: 12}, style]}>
       {Array.from({length: 3}).map((item, index) => (
         <Image
           key={`img${index}`}

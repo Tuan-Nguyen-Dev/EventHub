@@ -20,7 +20,7 @@ const DateTimePickerComponent = (props: Props) => {
   const [isShowDatePicker, setIsShowDatePicker] = useState(false);
   const {selected, onSelect, type, label} = props;
   //   console.log(new Date(selected).toISOString());
-  console.log('ádasdasd', selected);
+  // console.log('ádasdasd', selected);
 
   return (
     <View style={{flex: 1}}>

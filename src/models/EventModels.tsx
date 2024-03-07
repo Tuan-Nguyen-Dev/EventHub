@@ -7,7 +7,7 @@ export interface EventModel {
   location: Location;
   starAt: number;
   title: string;
-  user: string[];
+  users: string[];
 }
 
 export interface Location {

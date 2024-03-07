@@ -28,10 +28,10 @@ const DropdownPicker = (props: Props) => {
 
   const [isVisibleModalize, setIsVisibleModelize] = useState(false);
   const [searchKey, setSearchKey] = useState('');
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const modelizeRef = useRef<Modalize>();
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
-  console.log('selectedItems', selected);
+  // console.log('selectedItems', selected);
 
   useEffect(() => {
     if (isVisibleModalize) {
@@ -40,10 +40,10 @@ const DropdownPicker = (props: Props) => {
   }, [isVisibleModalize]);
 
   useEffect(() => {
-    if (isVisibleModalize && selected && selected.length > 0) {
-      setSelectedItems(selected as string[]);
+    if (isVisibleModalize && selected) {
+      setSelectedItems(multiple ? (selected as string[]) : []);
     }
-  }, [isVisibleModalize, selected]);
+  }, [isVisibleModalize, selected, multiple]);
 
   const handleSelectItem = (id: string) => {
     if (selectedItems.includes(id)) {
@@ -65,7 +65,9 @@ const DropdownPicker = (props: Props) => {
         onPress={
           multiple
             ? () => handleSelectItem(item.value)
-            : () => onSelect(item.value)
+            : () => {
+                onSelect(item.value), modelizeRef.current?.close();
+              }
         }
         key={item.value}
         style={styles.listItemUser}>
@@ -131,8 +133,17 @@ const DropdownPicker = (props: Props) => {
           setIsVisibleModelize(true);
         }}>
         <RowComponent style={{flex: 1, flexWrap: 'wrap'}}>
-          {selectedItems.length > 0 ? (
-            selectedItems.map(item => renderSelectedItem(item))
+          {selected ? (
+            selectedItems.length > 0 ? (
+              selectedItems.map(item => renderSelectedItem(item))
+            ) : (
+              <TextComponent
+                text={
+                  values.find(element => element.value === selected)?.label ??
+                  ''
+                }
+              />
+            )
           ) : (
             <TextComponent text="Select" />
           )}

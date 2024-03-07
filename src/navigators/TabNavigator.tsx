@@ -24,6 +24,7 @@ const TabNavigator = () => {
           alignItems: 'center',
           backgroundColor: appColors.white,
         },
+        tabBarHideOnKeyboard: true,
         tabBarIcon: ({focused, color, size}) => {
           let icon: ReactNode;
           color = focused ? appColors.primary : appColors.gray5;
@@ -48,21 +49,6 @@ const TabNavigator = () => {
                   styles={{marginTop: Platform.OS === 'ios' ? 50 : -60}}>
                   <AddSquare size={24} color={appColors.white} variant="Bold" />
                 </CricleComponent>
-                // <View
-                //   style={[
-                //     globalStyles.shadow,
-                //     {
-                //       width: 52,
-                //       height: 52,
-                //       backgroundColor: appColors.primary,
-                //       borderRadius: 100,
-                //       justifyContent: 'center',
-                //       alignItems: 'center',
-                //       marginTop: Platform.OS === 'ios' ? 50 : -60,
-                //     },
-                //   ]}>
-                //   <AddSquare size={24} color={appColors.white} variant="Bold" />
-                // </View>
               );
               break;
           }

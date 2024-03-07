@@ -3,9 +3,7 @@ import React from 'react';
 import {
   Image,
   ImageBackground,
-  Platform,
   ScrollView,
-  StatusBar,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -14,25 +12,27 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {
   ButtonComponent,
   CartComponent,
+  ContainerComponent,
   RowComponent,
   SectionComponent,
   SpaceComponents,
   TabBarComponent,
   TextComponent,
 } from '../../components';
-import {appColors} from '../../constants/appColor';
-import {globalStyles} from '../../styles/globalStyles';
 import AvatarGroup from '../../components/AvatarGroup';
-import {EventModel} from '../../models/EventModels';
+import {appColors} from '../../constants/appColor';
 import {fontFamilies} from '../../constants/fontFamilies';
+import {EventModel} from '../../models/EventModels';
+import {globalStyles} from '../../styles/globalStyles';
 
 const EventDetail = ({navigation, route}: any) => {
   const {item}: {item: EventModel} = route.params;
+  console.log('item', item);
   return (
     <View style={{flex: 1, backgroundColor: appColors.white}}>
       <ImageBackground
         source={require('../../assets/images/event-img.png')}
-        style={{flex: 1, height: 244}}
+        style={{flex: 1, height: 230}}
         imageStyle={{
           resizeMode: 'cover',
         }}>
@@ -69,11 +69,10 @@ const EventDetail = ({navigation, route}: any) => {
         </LinearGradient>
 
         <ScrollView
-          showsVerticalScrollIndicator={false}
           style={{
-            flex: 1,
             paddingTop: 100,
-          }}>
+          }}
+          contentContainerStyle={{flexGrow: 1}}>
           <SectionComponent>
             <View
               style={{
@@ -106,7 +105,7 @@ const EventDetail = ({navigation, route}: any) => {
               </RowComponent>
             </View>
           </SectionComponent>
-          <View style={{backgroundColor: appColors.white, flex: 1}}>
+          <View style={{backgroundColor: appColors.white}}>
             <SectionComponent>
               <TextComponent
                 title
@@ -195,37 +194,31 @@ const EventDetail = ({navigation, route}: any) => {
             <SectionComponent>
               <TextComponent text={item.description} />
             </SectionComponent>
+            <TabBarComponent title="About Event" />
+            <SectionComponent>
+              <TextComponent text={item.description} />
+            </SectionComponent>
           </View>
         </ScrollView>
       </ImageBackground>
 
-      <LinearGradient
-        colors={['rgba(255,255,255,0.5)', 'rgba(255,255,255,1)']}
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          right: 0,
-          left: 0,
-          padding: 12,
-        }}>
-        <ButtonComponent
-          text="BUY TICKET $120"
-          type="primary"
-          onPress={() => {}}
-          iconFlex="right"
-          icons={
-            <View
-              style={[
-                globalStyles.iconContainer,
-                {
-                  backgroundColor: appColors.primary2,
-                },
-              ]}>
-              <ArrowRight size={18} color={appColors.white} />
-            </View>
-          }
-        />
-      </LinearGradient>
+      <ButtonComponent
+        text="BUY TICKET $120"
+        type="primary"
+        onPress={() => {}}
+        iconFlex="right"
+        icons={
+          <View
+            style={[
+              globalStyles.iconContainer,
+              {
+                backgroundColor: appColors.primary2,
+              },
+            ]}>
+            <ArrowRight size={18} color={appColors.white} />
+          </View>
+        }
+      />
     </View>
   );
 };

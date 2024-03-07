@@ -163,8 +163,8 @@ const ModalLocation = (props: Props) => {
               marginVertical: 40,
               zIndex: -1,
             }}
-            showsUserLocation
             showsMyLocationButton
+            showsUserLocation
             initialRegion={{
               latitude: currenLocation.lat,
               longitude: currenLocation.long,

@@ -6,7 +6,12 @@ import {appColors} from '../constants/appColor';
 import ModalLocation from '../modals/ModalLocation';
 import {globalStyles} from '../styles/globalStyles';
 
-const ChoiceLocationComponet = () => {
+interface Props {
+  onSelect: (val: any) => void;
+}
+
+const ChoiceLocationComponet = (props: Props) => {
+  const {onSelect} = props;
   const [isVibleModalLocation, setIsVisibleModalLocation] = useState(false);
   const [addressSelected, setAddressSelected] = useState<{
     address: string;
@@ -15,6 +20,7 @@ const ChoiceLocationComponet = () => {
       long: number;
     };
   }>();
+
   return (
     <>
       <RowComponent
@@ -33,7 +39,11 @@ const ChoiceLocationComponet = () => {
       <ModalLocation
         visible={isVibleModalLocation}
         onClose={() => setIsVisibleModalLocation(false)}
-        onSelected={val => setAddressSelected(val)}
+        onSelected={val => {
+          setAddressSelected(val);
+          onSelect(val);
+          // console.log('CHeck val onSelecit', val);
+        }}
       />
     </>
   );
