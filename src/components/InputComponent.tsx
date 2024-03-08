@@ -1,10 +1,12 @@
 import {
+  StyleProp,
   StyleSheet,
   Text,
   TextInput,
   TextInputProps,
   TouchableOpacity,
   View,
+  ViewStyle,
 } from 'react-native';
 import React, {ReactNode, useState} from 'react';
 import {globalStyles} from '../styles/globalStyles';
@@ -22,6 +24,10 @@ interface Props {
   isPassword?: boolean;
   allowClear?: boolean;
   keyboardType?: TextInputProps['keyboardType'];
+  onEnd?: () => void;
+  multiline?: boolean;
+  numberOfLines?: number;
+  style?: StyleProp<ViewStyle>;
 }
 
 const InputComponent = (props: Props) => {
@@ -34,21 +40,38 @@ const InputComponent = (props: Props) => {
     allowClear,
     isPassword,
     keyboardType,
+    onEnd,
+    multiline,
+    numberOfLines,
+    style,
   } = props;
 
   const [isShowPassword, setIsShowPassword] = useState(isPassword ?? false);
   return (
-    <View style={[styles.inputContainer]}>
+    <View
+      style={[
+        styles.inputContainer,
+        {alignItems: multiline ? 'flex-start' : 'center'},
+        style,
+      ]}>
       {affix ?? affix}
 
       <TextInput
-        style={[styles.input, globalStyles.text]}
+        style={[
+          styles.input,
+          globalStyles.text,
+          {paddingHorizontal: affix || suffix ? 12 : 0},
+        ]}
         value={value}
         placeholder={placeholder ?? ''}
         onChangeText={val => onChange(val)}
         secureTextEntry={isShowPassword}
         placeholderTextColor={'#747688'}
         keyboardType={keyboardType ?? 'default'}
+        autoCapitalize="none"
+        onEndEditing={onEnd}
+        multiline={multiline}
+        numberOfLines={numberOfLines}
       />
 
       {suffix ?? suffix}
@@ -65,6 +88,7 @@ const InputComponent = (props: Props) => {
             color={appColors.gray}
           />
         ) : (
+          value &&
           value.length > 0 &&
           allowClear && (
             <AntDesign size={22} name="close" color={appColors.text} />
@@ -90,12 +114,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     backgroundColor: appColors.white,
     marginBottom: 20,
+    paddingVertical: 14,
   },
   input: {
     padding: 0,
     margin: 0,
     flex: 1,
-    paddingHorizontal: 14,
+    // paddingHorizontal: 14,
     color: appColors.text,
   },
 });
