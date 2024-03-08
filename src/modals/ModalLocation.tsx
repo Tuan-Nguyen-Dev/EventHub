@@ -59,15 +59,16 @@ const ModalLocation = (props: Props) => {
   }, []);
 
   useEffect(() => {
-    // console.log('adasd', addressSelected);
-    GeoCoder.from(addressSelected).then(res => {
-      const position = res.results[0].geometry.location;
-      // console.log('CHeck res', res.results[0].geometry.location);
-      setCurrenLocation({
-        lat: position.lat,
-        long: position.lng,
-      });
-    });
+    GeoCoder.from(addressSelected)
+      .then(res => {
+        const position = res.results[0].geometry.location;
+        // console.log('CHeck res', res.results[0].geometry.location);
+        setCurrenLocation({
+          lat: position.lat,
+          long: position.lng,
+        });
+      })
+      .catch(error => console.log(error));
   }, [addressSelected]);
 
   useEffect(() => {
@@ -96,6 +97,30 @@ const ModalLocation = (props: Props) => {
       console.log(error);
     }
   };
+
+  const handleGetAddressFromPosition = ({
+    latitude,
+    longitude,
+  }: {
+    latitude: number;
+    longitude: number;
+  }) => {
+    onSelected({
+      address: 'This is demo address',
+      position: {
+        lat: latitude,
+        long: longitude,
+      },
+    });
+    onClose();
+    GeoCoder.from(latitude, longitude)
+      .then(json => {
+        const addressComponent = json.results[0].address_components[0];
+        console.log(addressComponent);
+      })
+      .catch(error => console.log(error));
+  };
+  // Lorem ipsum, dolor sit amet consectetur adipisicing elit. Harum, dolorum ipsa magnam corporis cumque sunt delectus quae illum at. Repudiandae commodi inventore aut ratione minus deserunt illum consequuntur. Ratione, facilis.
 
   return (
     <Modal animationType="slide" visible={visible} style={{flex: 1}}>
@@ -171,6 +196,9 @@ const ModalLocation = (props: Props) => {
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
+            onPress={event =>
+              handleGetAddressFromPosition(event.nativeEvent.coordinate)
+            }
             region={{
               latitude: currenLocation.lat,
               longitude: currenLocation.long,

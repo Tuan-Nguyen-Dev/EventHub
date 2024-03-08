@@ -44,7 +44,7 @@ const initValues = {
   category: '',
 };
 
-const AddNewScreen = () => {
+const AddNewScreen = ({navigation}: any) => {
   const auth = useSelector(authSelector);
   // console.log('check auth', auth);
   const [eventData, setEventData] = useState<any>({
@@ -55,6 +55,7 @@ const AddNewScreen = () => {
   const [userSelects, setUserSelects] = useState<SelectModel[]>([]);
   const [fileSelected, setFileSelected] = useState<any>();
   const [errorMess, setErrorMess] = useState<string[]>([]);
+  // console.log('asdasd', fileSelected.uri);
 
   const handleChangeValue = (key: string, value: string | Date | string[]) => {
     const items = {...eventData};
@@ -131,6 +132,9 @@ const AddNewScreen = () => {
     const api = `/add-new`;
     try {
       const res = await eventAPI.HandleEvent(api, event, 'post');
+      navigation.navigate('Explore', {
+        screen: 'HomeScreen',
+      });
       console.log(res);
     } catch (error) {
       console.log(error);
