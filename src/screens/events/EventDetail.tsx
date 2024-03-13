@@ -153,12 +153,12 @@ const EventDetail = ({navigation, route}: any) => {
                 <View
                   style={{flex: 1, height: 48, justifyContent: 'space-around'}}>
                   <TextComponent
-                    text={item.location.title}
+                    text={item.locationTitle}
                     size={16}
                     font={fontFamilies.medium}
                   />
                   <TextComponent
-                    text={item.location.address}
+                    text={item.locationAddress}
                     color={appColors.gray}
                   />
                 </View>

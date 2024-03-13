@@ -3,7 +3,8 @@ import React, {ReactNode} from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {appColors} from '../constants/appColor';
 import TagComponent from './TagComponent';
-import {Art, KnifeFork} from '../assets/svgs';
+import {Art, KnifeFork, KnifeFork_Color} from '../assets/svgs';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 interface Props {
   isFill?: boolean;
 }
@@ -46,13 +47,22 @@ const CategoriresList = (props: Props) => {
     {
       key: 'food',
       label: 'Food',
-      icon: <KnifeFork color={isFill ? appColors.white : '#29D697'} />,
+      icon: isFill ? (
+        <KnifeFork color={isFill ? appColors.white : '#29D697'} />
+      ) : (
+        <KnifeFork_Color color={isFill ? appColors.white : '#29D697'} />
+      ),
       color: '#29D697',
     },
     {
       key: 'art',
       label: 'Art',
-      icon: <Art color={isFill ? appColors.white : '#46CDFB'} />,
+      icon: (
+        <Ionicons
+          name="color-palette"
+          color={isFill ? appColors.white : '#46CDFB'}
+        />
+      ),
       color: '#46CDFB',
     },
   ];
@@ -73,6 +83,7 @@ const CategoriresList = (props: Props) => {
           bgColor={isFill ? item.color : appColors.white}
           label={item.label}
           icon={item.icon}
+          textColor={isFill ? appColors.white : appColors.text2}
         />
       )}
     />

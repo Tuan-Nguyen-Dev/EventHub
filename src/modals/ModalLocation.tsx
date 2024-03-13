@@ -120,7 +120,6 @@ const ModalLocation = (props: Props) => {
       })
       .catch(error => console.log(error));
   };
-  // Lorem ipsum, dolor sit amet consectetur adipisicing elit. Harum, dolorum ipsa magnam corporis cumque sunt delectus quae illum at. Repudiandae commodi inventore aut ratione minus deserunt illum consequuntur. Ratione, facilis.
 
   return (
     <Modal animationType="slide" visible={visible} style={{flex: 1}}>

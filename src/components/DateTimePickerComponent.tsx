@@ -17,20 +17,14 @@ interface Props {
 }
 
 const DateTimePickerComponent = (props: Props) => {
-  const [isShowDatePicker, setIsShowDatePicker] = useState(false);
   const {selected, onSelect, type, label} = props;
-  //   console.log(new Date(selected).toISOString());
-  // console.log('ádasdasd', selected);
-
+  const [isShowDatePicker, setIsShowDatePicker] = useState(false);
+  // console.log('selected', selected);
+  // console.log('onselected', onSelect);
   return (
     <View style={{flex: 1}}>
       {label && (
-        <TextComponent
-          title
-          text="Start At: "
-          styles={{marginBottom: 8}}
-          size={18}
-        />
+        <TextComponent text={label} styles={{marginBottom: 8}} size={18} />
       )}
       <RowComponent
         style={[globalStyles.inputContainer]}
@@ -41,7 +35,7 @@ const DateTimePickerComponent = (props: Props) => {
               ? type === 'time'
                 ? DateTime.GetTime(selected)
                 : DateTime.GetDate(selected)
-              : 'Choice Time'
+              : 'Choice'
           }`}
           flex={1}
           font={fontFamilies.medium}
@@ -54,16 +48,15 @@ const DateTimePickerComponent = (props: Props) => {
         )}
       </RowComponent>
       <DatePicker
+        mode={type}
         open={isShowDatePicker}
         date={new Date()}
-        mode={type}
         modal
+        onCancel={() => setIsShowDatePicker(false)}
         onConfirm={val => {
           setIsShowDatePicker(false);
+          // console.log(val);
           onSelect(val);
-        }}
-        onCancel={() => {
-          setIsShowDatePicker(false);
         }}
       />
     </View>

@@ -37,7 +37,7 @@ const initValues = {
   users: [],
   photoUrl: '',
   authorId: '',
-  starAt: Date.now(),
+  startAt: Date.now(),
   endAt: Date.now(),
   date: Date.now(),
   price: '',
@@ -127,7 +127,7 @@ const AddNewScreen = ({navigation}: any) => {
   };
 
   const handlePustEvent = async (event: EventModel) => {
-    console.log('Event', event);
+    // console.log('Event', event);
 
     const api = `/add-new`;
     try {
@@ -154,7 +154,7 @@ const AddNewScreen = ({navigation}: any) => {
 
     setEventData(items);
   };
-
+  // console.log('Event data', eventData);
   return (
     <ContainerComponent isScroll>
       <SectionComponent>
@@ -219,27 +219,32 @@ const AddNewScreen = ({navigation}: any) => {
 
         <RowComponent>
           <DateTimePickerComponent
-            label="Start At :"
+            label="Start at: "
+            type="time"
+            onSelect={val => handleChangeValue('starAt', val)}
+            selected={eventData.startAt}
+          />
+          {/* <DateTimePickerComponent
+            label="Start at: "
+            type="time"
             onSelect={val => handleChangeValue('starAt', val)}
             selected={eventData.starAt}
-            type="time"
-          />
+          /> */}
           <SpaceComponents width={20} />
           <DateTimePickerComponent
-            label="End At :"
+            label="End at:"
+            type="time"
             onSelect={val => handleChangeValue('endAt', val)}
             selected={eventData.endAt}
-            type="time"
           />
         </RowComponent>
 
         <DateTimePickerComponent
-          label="Date :"
+          label="Date:"
+          type="date"
           onSelect={val => handleChangeValue('date', val)}
           selected={eventData.date}
-          type="date"
         />
-
         <DropdownPicker
           label="Invite User"
           values={userSelects}
