@@ -1,5 +1,5 @@
 import {ArrowLeft, ArrowRight, Calendar, Location} from 'iconsax-react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Image,
   ImageBackground,
@@ -24,14 +24,76 @@ import {appColors} from '../../constants/appColor';
 import {fontFamilies} from '../../constants/fontFamilies';
 import {EventModel} from '../../models/EventModels';
 import {globalStyles} from '../../styles/globalStyles';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  AuthState,
+  authReducer,
+  authSelector,
+} from '../../redux/reducers/authReducer';
+import eventAPI from '../../apis/eventApi';
+import LoadingComponent from '../../components/LoadingComponent';
+import {LoadingModel} from '../../modals';
+import {UserHandle} from '../../utils/UserHandlers';
+import {DateTime} from '../../utils/DateTime';
+import {appInfo} from '../../constants/appInfos';
 
 const EventDetail = ({navigation, route}: any) => {
   const {item}: {item: EventModel} = route.params;
-  console.log('item', item);
+  const [isLoading, setIsLoading] = useState(false);
+  const [followers, setFollowers] = useState<string[]>([]);
+
+  const auth: AuthState = useSelector(authSelector);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    item && getFollowersById();
+  }, [item]);
+
+  const getFollowersById = async () => {
+    const api = `/followers?id=${item._id}`;
+    try {
+      const res = await eventAPI.HandleEvent(api);
+      res && res.data && setFollowers(res.data);
+    } catch (error) {
+      console.log('Can not get followers', error);
+    }
+  };
+
+  const handleFlower = () => {
+    const items = [...followers];
+    if (items.includes(auth.id)) {
+      const index = items.findIndex(element => element === auth.id);
+      if (index !== -1) {
+        items.splice(index, 1);
+      }
+    } else {
+      items.push(auth.id);
+    }
+    setFollowers(items);
+    handleUpdateFollowers(items);
+  };
+
+  const handleUpdateFollowers = async (data: string[]) => {
+    await UserHandle.getFollowersById(auth.id, dispatch);
+
+    const api = `/update-followes`;
+    try {
+      await eventAPI.HandleEvent(
+        api,
+        {
+          id: item._id,
+          followers: data,
+        },
+        'post',
+      );
+    } catch (error) {
+      console.log('Can not  update followers Event details ', error);
+    }
+  };
+
   return (
     <View style={{flex: 1, backgroundColor: appColors.white}}>
       <ImageBackground
-        source={require('../../assets/images/event-img.png')}
+        source={{uri: item.photoUrl}}
         style={{flex: 1, height: 230}}
         imageStyle={{
           resizeMode: 'cover',
@@ -56,12 +118,21 @@ const EventDetail = ({navigation, route}: any) => {
                 color={appColors.white}
               />
               <CartComponent
-                color="#FFFFFF4D"
+                onPress={handleFlower}
+                color={
+                  auth.follow_events && auth.follow_events.includes(item._id)
+                    ? 'FFFFFFB3'
+                    : '#FFFFFF4D'
+                }
                 style={[globalStyles.noSpaceCard, {width: 36, height: 36}]}>
                 <MaterialIcons
                   name="bookmark"
                   size={22}
-                  color={appColors.white}
+                  color={
+                    auth.follow_events && auth.follow_events.includes(item._id)
+                      ? appColors.danger2
+                      : appColors.white
+                  }
                 />
               </CartComponent>
             </RowComponent>
@@ -74,36 +145,46 @@ const EventDetail = ({navigation, route}: any) => {
           }}
           contentContainerStyle={{flexGrow: 1}}>
           <SectionComponent>
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                flex: 1,
-              }}>
-              <RowComponent
-                justify="space-between"
-                style={[
-                  globalStyles.shadow,
-                  {
-                    backgroundColor: appColors.white,
-                    borderRadius: 100,
-                    paddingHorizontal: 12,
-                    width: '90%',
-                  },
-                ]}>
-                <AvatarGroup size={36} />
-                <TouchableOpacity
+            {item.users.length > 0 ? (
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  flex: 1,
+                }}>
+                <RowComponent
+                  justify="space-between"
                   style={[
-                    globalStyles.button,
+                    globalStyles.shadow,
                     {
-                      backgroundColor: appColors.primary,
-                      paddingVertical: 8,
+                      backgroundColor: appColors.white,
+                      borderRadius: 100,
+                      paddingHorizontal: 12,
+                      width: '90%',
                     },
                   ]}>
-                  <TextComponent text="Invite" color={appColors.white} />
-                </TouchableOpacity>
-              </RowComponent>
-            </View>
+                  <AvatarGroup userIds={item.users} size={36} />
+                  <TouchableOpacity
+                    style={[
+                      globalStyles.button,
+                      {
+                        backgroundColor: appColors.primary,
+                        paddingVertical: 8,
+                      },
+                    ]}>
+                    <TextComponent text="Invite" color={appColors.white} />
+                  </TouchableOpacity>
+                </RowComponent>
+              </View>
+            ) : (
+              <>
+                <ButtonComponent
+                  text="Invite"
+                  type="primary"
+                  styles={{borderRadius: 100}}
+                />
+              </>
+            )}
           </SectionComponent>
           <View style={{backgroundColor: appColors.white}}>
             <SectionComponent>
@@ -129,12 +210,14 @@ const EventDetail = ({navigation, route}: any) => {
                 <View
                   style={{flex: 1, height: 48, justifyContent: 'space-around'}}>
                   <TextComponent
-                    text="14 December 2024"
+                    text={DateTime.GetDate(new Date(item.date))}
                     size={16}
                     font={fontFamilies.medium}
                   />
                   <TextComponent
-                    text="Monday, AM: 8:00"
+                    text={`${
+                      appInfo.dayNames[new Date(item.date).getDay()]
+                    }, ${DateTime.GetStartAndEnd(item.startAt, item.endAt)}`}
                     color={appColors.gray}
                   />
                 </View>
@@ -219,6 +302,7 @@ const EventDetail = ({navigation, route}: any) => {
           </View>
         }
       />
+      <LoadingModel visible={isLoading} />
     </View>
   );
 };

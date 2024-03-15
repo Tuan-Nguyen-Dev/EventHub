@@ -19,7 +19,8 @@ import {appColors} from '../../constants/appColor';
 import {appInfo} from '../../constants/appInfos';
 import {EventModel} from '../../models/EventModels';
 import {globalStyles} from '../../styles/globalStyles';
-
+import Geocoder from 'react-native-geocoding';
+Geocoder.init(process.env.MAP_API_KEY as string);
 const MapScreen = ({navigation}: any) => {
   const [currenLocation, setCurrenLocation] = useState<{
     lat: number;

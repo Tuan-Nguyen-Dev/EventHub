@@ -15,6 +15,13 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
 import {Image} from 'react-native';
 import {DateTime} from '../utils/DateTime';
+import {useSelector} from 'react-redux';
+import {
+  AuthState,
+  authReducer,
+  authSelector,
+} from '../redux/reducers/authReducer';
+import {numberToString} from '../utils/numberToString';
 interface Props {
   item: EventModel;
   type: 'card' | 'list';
@@ -23,6 +30,8 @@ interface Props {
 const EventItem = (props: Props) => {
   const {item, type} = props;
   const navigation: any = useNavigation();
+  const auth: AuthState = useSelector(authSelector);
+  // console.log(new Date(item.date).toISOString());
   return (
     <CartComponent
       isShawdown
@@ -35,37 +44,41 @@ const EventItem = (props: Props) => {
           <ImageBackground
             imageStyle={{resizeMode: 'cover', borderRadius: 12}}
             style={{flex: 1, padding: 10, marginBottom: 12, height: 130}}
-            source={require('../assets/images/event-img.png')}>
+            source={{uri: item.photoUrl}}>
             <RowComponent justify="space-between">
               <CartComponent
                 color="#FFFFFFB3"
                 style={[globalStyles.noSpaceCard]}>
                 <TextComponent
-                  text="10"
+                  text={numberToString(new Date(item.date).getDate())}
                   font={fontFamilies.bold}
                   size={18}
                   color="#F0635A"
                 />
                 <TextComponent
-                  text="June"
+                  text={appInfo.monthNames[
+                    new Date(item.date).getMonth()
+                  ].substring(0, 3)}
                   font={fontFamilies.semiBold}
                   size={12}
                   color="#F0635A"
                 />
               </CartComponent>
-              <CartComponent
-                color="#FFFFFFB3"
-                style={[globalStyles.noSpaceCard]}>
-                <MaterialIcons
-                  name="bookmark"
-                  size={22}
-                  color={appColors.danger2}
-                />
-              </CartComponent>
+              {auth.follow_events && auth.follow_events.includes(item._id) && (
+                <CartComponent
+                  color="#FFFFFFB3"
+                  style={[globalStyles.noSpaceCard]}>
+                  <MaterialIcons
+                    name="bookmark"
+                    size={22}
+                    color={appColors.danger2}
+                  />
+                </CartComponent>
+              )}
             </RowComponent>
           </ImageBackground>
           <TextComponent numberOfLines={1} text={item.title} title size={18} />
-          <AvatarGroup />
+          <AvatarGroup userIds={item.users} />
           <RowComponent>
             <Location size={18} color={appColors.gray3} variant="Bold" />
             <SpaceComponents width={10} />
@@ -95,7 +108,7 @@ const EventItem = (props: Props) => {
               <TextComponent
                 color={appColors.primary}
                 text={`${DateTime.GetDayString(item.date)} • ${DateTime.GetTime(
-                  new Date(item.starAt),
+                  new Date(item.startAt),
                 )}`}
               />
               <TextComponent

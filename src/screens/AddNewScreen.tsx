@@ -224,12 +224,7 @@ const AddNewScreen = ({navigation}: any) => {
             onSelect={val => handleChangeValue('starAt', val)}
             selected={eventData.startAt}
           />
-          {/* <DateTimePickerComponent
-            label="Start at: "
-            type="time"
-            onSelect={val => handleChangeValue('starAt', val)}
-            selected={eventData.starAt}
-          /> */}
+
           <SpaceComponents width={20} />
           <DateTimePickerComponent
             label="End at:"

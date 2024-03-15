@@ -44,20 +44,25 @@ import axios from 'axios';
 import {err} from 'react-native-svg';
 import {AddressModel} from '../../models/AddressModel';
 import Geocoder from 'react-native-geocoding';
+import eventAPI from '../../apis/eventApi';
+import {EventModel} from '../../models/EventModels';
+import LoadingComponent from '../../components/LoadingComponent';
 
 Geocoder.init(process.env.MAP_API_KEY as string);
 
 const HomeScreen = ({navigation}: any) => {
   const [currenLocation, setCurrenLocation] = useState<AddressModel>();
-
+  const [events, setEvents] = useState<EventModel[]>([]);
+  const [nearbyEvents, setNearbyEvents] = useState<EventModel[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
-  const auth = useSelector(authSelector);
-  // console.log('Map api', process.env.MAP_API_KEY);
+  // const auth = useSelector(authSelector);
+  // // console.log('Map api', process.env.MAP_API_KEY);
 
-  useEffect(() => {
-    reverseGeoLocation({lat: 16.76896, long: 107.2696151});
-  }, []);
+  // useEffect(() => {
+  //   reverseGeoLocation({lat: 16.76896, long: 107.2696151});
+  // }, []);
 
   useEffect(() => {
     GeoLocation.getCurrentPosition(position => {
@@ -68,7 +73,14 @@ const HomeScreen = ({navigation}: any) => {
         });
       }
     });
+    getEvents();
   }, []);
+
+  useEffect(() => {
+    currenLocation &&
+      currenLocation.position &&
+      getEvents(currenLocation.position.lat, currenLocation.position.lng);
+  }, [currenLocation]);
 
   const reverseGeoLocation = async ({
     lat,
@@ -89,23 +101,54 @@ const HomeScreen = ({navigation}: any) => {
       console.log(err);
     }
   };
-  // console.log(currenLocation);
 
-  const itemEvents: any = {
-    title: 'International Band Music Concert',
-    description:
-      "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-    location: {
-      title: 'Title',
-      address: 'Ha Noi UUUUU',
-    },
-    user: [''],
-    imageUr: '',
-    authorId: '',
-    starAt: Date.now(),
-    endAt: Date.now(),
-    date: Date.now(),
+  const getEvents = async (lat?: number, long?: number, distance?: number) => {
+    // const api =
+    //   lat && long
+    //     ? `/get-events?lat=${lat}&long=${long}&distance=${5}`
+    //     : '/get-events';
+    const api = `${
+      lat && long
+        ? `/get-events?lat=${lat}&long=${long}&distance=${
+            distance ?? 5
+          }&limit=5`
+        : `/get-events?limit=5`
+    }`;
+    // &date=${new Date().toISOString()}`;
+
+    // console.log('api', api);
+    setIsLoading(true);
+    try {
+      const res = await eventAPI.HandleEvent(api);
+      setIsLoading(false);
+
+      res &&
+        res.data &&
+        (lat && long ? setNearbyEvents(res.data) : setEvents(res.data));
+
+      // console.log('Response in home get events', setNearbyEvents(res.data));
+    } catch (error) {
+      setIsLoading(false);
+
+      console.log(`Get events error in home line  ${error} `);
+    }
   };
+
+  // console.log('nearbyEvents', nearbyEvents);
+
+  //   description:
+  //     "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
+  //   location: {
+  //     title: 'Title',
+  //     address: 'Ha Noi UUUUU',
+  //   },
+  //   user: [''],
+  //   imageUr: '',
+  //   authorId: '',
+  //   starAt: Date.now(),
+  //   endAt: Date.now(),
+  //   date: Date.now(),
+  // };
 
   return (
     <View style={[globalStyles.container]}>
@@ -220,14 +263,20 @@ const HomeScreen = ({navigation}: any) => {
         showsVerticalScrollIndicator={false}
         style={{flex: 1, marginTop: Platform.OS === 'android' ? 22 : 18}}>
         <TabBarComponent title="Upcoming Events" onPress={() => {}} />
-        <FlatList
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          data={Array.from({length: 5})}
-          renderItem={({item, index}) => (
-            <EventItem type="card" key={index} item={itemEvents} />
-          )}
-        />
+
+        {events.length > 0 ? (
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={events}
+            renderItem={({item, index}) => (
+              <EventItem type="card" key={index} item={item} />
+            )}
+          />
+        ) : (
+          <LoadingComponent isLoading={isLoading} values={events.length} />
+        )}
+
         <SectionComponent>
           <ImageBackground
             source={require('../../assets/images/invite-image.png')}
@@ -256,14 +305,21 @@ const HomeScreen = ({navigation}: any) => {
         </SectionComponent>
 
         <TabBarComponent title="Nearby You" onPress={() => {}} />
-        <FlatList
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          data={Array.from({length: 5})}
-          renderItem={({item, index}) => (
-            <EventItem type="card" key={index} item={itemEvents} />
-          )}
-        />
+        {nearbyEvents.length > 0 ? (
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={nearbyEvents}
+            renderItem={({item, index}) => (
+              <EventItem type="card" key={index} item={item} />
+            )}
+          />
+        ) : (
+          <LoadingComponent
+            isLoading={isLoading}
+            values={nearbyEvents.length}
+          />
+        )}
       </ScrollView>
       {/* <Button
         title="LogOut"
