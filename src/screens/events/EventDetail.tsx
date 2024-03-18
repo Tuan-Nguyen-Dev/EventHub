@@ -92,11 +92,13 @@ const EventDetail = ({navigation, route}: any) => {
 
   return (
     <View style={{flex: 1, backgroundColor: appColors.white}}>
-      <ImageBackground
-        source={{uri: item.photoUrl}}
-        style={{flex: 1, height: 230}}
-        imageStyle={{
-          resizeMode: 'cover',
+      <View
+        style={{
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          left: 0,
+          zIndex: 1,
         }}>
         <LinearGradient colors={['rgba(0,0,0,0.5)', 'rgba(0,0,0,0)']}>
           <RowComponent
@@ -138,170 +140,174 @@ const EventDetail = ({navigation, route}: any) => {
             </RowComponent>
           </RowComponent>
         </LinearGradient>
-
-        <ScrollView
-          style={{
-            paddingTop: 100,
-          }}
-          contentContainerStyle={{flexGrow: 1}}>
-          <SectionComponent>
-            {item.users.length > 0 ? (
-              <View
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  flex: 1,
-                }}>
-                <RowComponent
-                  justify="space-between"
+      </View>
+      <ScrollView
+        style={{
+          flex: 1,
+        }}
+        showsVerticalScrollIndicator={false}>
+        <Image
+          source={{uri: item.photoUrl}}
+          style={{width: appInfo.sizes.WIDTH, height: 240, resizeMode: 'cover'}}
+        />
+        <SectionComponent style={{marginTop: -20}}>
+          {item.users.length > 0 ? (
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                flex: 1,
+              }}>
+              <RowComponent
+                justify="space-between"
+                style={[
+                  globalStyles.shadow,
+                  {
+                    backgroundColor: appColors.white,
+                    borderRadius: 100,
+                    paddingHorizontal: 12,
+                    width: '90%',
+                  },
+                ]}>
+                <AvatarGroup userIds={item.users} size={36} />
+                <TouchableOpacity
                   style={[
-                    globalStyles.shadow,
+                    globalStyles.button,
                     {
-                      backgroundColor: appColors.white,
-                      borderRadius: 100,
-                      paddingHorizontal: 12,
-                      width: '90%',
+                      backgroundColor: appColors.primary,
+                      paddingVertical: 8,
                     },
                   ]}>
-                  <AvatarGroup userIds={item.users} size={36} />
-                  <TouchableOpacity
-                    style={[
-                      globalStyles.button,
-                      {
-                        backgroundColor: appColors.primary,
-                        paddingVertical: 8,
-                      },
-                    ]}>
-                    <TextComponent text="Invite" color={appColors.white} />
-                  </TouchableOpacity>
-                </RowComponent>
-              </View>
-            ) : (
-              <>
-                <ButtonComponent
-                  text="Invite"
-                  type="primary"
-                  styles={{borderRadius: 100}}
-                />
-              </>
-            )}
-          </SectionComponent>
-          <View style={{backgroundColor: appColors.white}}>
-            <SectionComponent>
-              <TextComponent
-                title
-                font={fontFamilies.medium}
-                size={34}
-                text={item.title}
+                  <TextComponent text="Invite" color={appColors.white} />
+                </TouchableOpacity>
+              </RowComponent>
+            </View>
+          ) : (
+            <>
+              <ButtonComponent
+                text="Invite"
+                type="primary"
+                styles={{borderRadius: 100}}
               />
-            </SectionComponent>
-            <SectionComponent>
-              <RowComponent style={{marginBottom: 20}}>
-                <CartComponent
-                  color={`${appColors.primary}4D`}
-                  style={[globalStyles.noSpaceCard, {width: 48, height: 48}]}>
-                  <Calendar
-                    size={22}
-                    color={appColors.primary}
-                    variant="Bold"
-                  />
-                </CartComponent>
-                <SpaceComponents width={16} />
-                <View
-                  style={{flex: 1, height: 48, justifyContent: 'space-around'}}>
-                  <TextComponent
-                    text={DateTime.GetDate(new Date(item.date))}
-                    size={16}
-                    font={fontFamilies.medium}
-                  />
-                  <TextComponent
-                    text={`${
-                      appInfo.dayNames[new Date(item.date).getDay()]
-                    }, ${DateTime.GetStartAndEnd(item.startAt, item.endAt)}`}
-                    color={appColors.gray}
-                  />
-                </View>
-              </RowComponent>
-              <RowComponent style={{marginBottom: 20}}>
-                <CartComponent
-                  color={`${appColors.primary}4D`}
-                  style={[globalStyles.noSpaceCard, {width: 48, height: 48}]}>
-                  <Location
-                    size={22}
-                    color={appColors.primary}
-                    variant="Bold"
-                  />
-                </CartComponent>
-                <SpaceComponents width={16} />
-                <View
-                  style={{flex: 1, height: 48, justifyContent: 'space-around'}}>
-                  <TextComponent
-                    text={item.locationTitle}
-                    size={16}
-                    font={fontFamilies.medium}
-                  />
-                  <TextComponent
-                    text={item.locationAddress}
-                    color={appColors.gray}
-                  />
-                </View>
-              </RowComponent>
-              <RowComponent style={{marginBottom: 20}}>
-                <Image
-                  source={{
-                    uri: 'https://khoinguonsangtao.vn/wp-content/uploads/2022/09/hinh-anh-gai-xinh-deo-kinh.jpg',
-                  }}
-                  style={{
-                    width: 48,
-                    height: 48,
-                    borderRadius: 12,
-                    resizeMode: 'cover',
-                  }}
+            </>
+          )}
+        </SectionComponent>
+        <View style={{backgroundColor: appColors.white}}>
+          <SectionComponent>
+            <TextComponent
+              title
+              font={fontFamilies.medium}
+              size={34}
+              text={item.title}
+            />
+          </SectionComponent>
+          <SectionComponent>
+            <RowComponent style={{marginBottom: 20}}>
+              <CartComponent
+                color={`${appColors.primary}4D`}
+                style={[globalStyles.noSpaceCard, {width: 48, height: 48}]}>
+                <Calendar size={22} color={appColors.primary} variant="Bold" />
+              </CartComponent>
+              <SpaceComponents width={16} />
+              <View
+                style={{flex: 1, height: 48, justifyContent: 'space-around'}}>
+                <TextComponent
+                  text={DateTime.GetDate(new Date(item.date))}
+                  size={16}
+                  font={fontFamilies.medium}
                 />
-                <SpaceComponents width={16} />
-                <View
-                  style={{flex: 1, height: 48, justifyContent: 'space-around'}}>
-                  <TextComponent
-                    text="Son Tung MPT"
-                    size={16}
-                    font={fontFamilies.medium}
-                  />
-                  <TextComponent
-                    text="Monday, AM: 8:00"
-                    color={appColors.gray}
-                  />
-                </View>
-              </RowComponent>
-            </SectionComponent>
-            <TabBarComponent title="About Event" />
-            <SectionComponent>
-              <TextComponent text={item.description} />
-            </SectionComponent>
-            <TabBarComponent title="About Event" />
-            <SectionComponent>
-              <TextComponent text={item.description} />
-            </SectionComponent>
-          </View>
-        </ScrollView>
-      </ImageBackground>
+                <TextComponent
+                  text={`${
+                    appInfo.dayNames[new Date(item.date).getDay()]
+                  }, ${DateTime.GetStartAndEnd(item.startAt, item.endAt)}`}
+                  color={appColors.gray}
+                />
+              </View>
+            </RowComponent>
+            <RowComponent style={{marginBottom: 20, alignItems: 'flex-start'}}>
+              <CartComponent
+                color={`${appColors.primary}4D`}
+                style={[globalStyles.noSpaceCard, {width: 48, height: 48}]}>
+                <Location size={22} color={appColors.primary} variant="Bold" />
+              </CartComponent>
+              <SpaceComponents width={16} />
+              <View
+                style={{
+                  flex: 1,
+                  minHeight: 48,
+                  justifyContent: 'space-around',
+                }}>
+                <TextComponent
+                  text={item.locationTitle}
+                  size={16}
+                  font={fontFamilies.medium}
+                />
+                <TextComponent
+                  text={item.locationAddress}
+                  color={appColors.gray}
+                />
+              </View>
+            </RowComponent>
+            <RowComponent style={{marginBottom: 20}}>
+              <Image
+                source={{
+                  uri: 'https://khoinguonsangtao.vn/wp-content/uploads/2022/09/hinh-anh-gai-xinh-deo-kinh.jpg',
+                }}
+                style={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: 12,
+                  resizeMode: 'cover',
+                }}
+              />
+              <SpaceComponents width={16} />
+              <View
+                style={{flex: 1, height: 48, justifyContent: 'space-around'}}>
+                <TextComponent
+                  text="Son Tung MPT"
+                  size={16}
+                  font={fontFamilies.medium}
+                />
+                <TextComponent text="Monday, AM: 8:00" color={appColors.gray} />
+              </View>
+            </RowComponent>
+          </SectionComponent>
+          <TabBarComponent title="About Event" />
+          <SectionComponent>
+            <TextComponent text={item.description} />
+          </SectionComponent>
+        </View>
+        <SpaceComponents height={80} />
+      </ScrollView>
 
-      <ButtonComponent
-        text="BUY TICKET $120"
-        type="primary"
-        onPress={() => {}}
-        iconFlex="right"
-        icons={
-          <View
-            style={[
-              globalStyles.iconContainer,
-              {
-                backgroundColor: appColors.primary2,
-              },
-            ]}>
-            <ArrowRight size={18} color={appColors.white} />
-          </View>
-        }
-      />
+      <LinearGradient
+        colors={[`rgba(255,255,255,0.7)`, `rgba(255,255,255,1)`]}
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          padding: 12,
+        }}>
+        <ButtonComponent
+          text="BUY TICKET $120"
+          type="primary"
+          onPress={() => {}}
+          iconFlex="right"
+          icons={
+            <View
+              style={[
+                globalStyles.iconContainer,
+                {
+                  backgroundColor: appColors.primary2,
+                },
+              ]}>
+              <ArrowRight size={18} color={appColors.white} />
+            </View>
+          }
+        />
+      </LinearGradient>
+
       <LoadingModel visible={isLoading} />
     </View>
   );

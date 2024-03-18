@@ -4,7 +4,8 @@ export interface AuthState {
     id: string,
     email: string,
     accesstoken: string,
-    follow_events: string[]
+    follow_events: string[],
+    fcmTokens: string[]
 }
 
 
@@ -12,7 +13,8 @@ const initialState: AuthState = {
     id: '',
     email: '',
     accesstoken: '',
-    follow_events: []
+    follow_events: [],
+    fcmTokens: []
 
 };
 

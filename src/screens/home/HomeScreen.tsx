@@ -14,6 +14,7 @@ import {
   Platform,
   ScrollView,
   StatusBar,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -47,7 +48,9 @@ import Geocoder from 'react-native-geocoding';
 import eventAPI from '../../apis/eventApi';
 import {EventModel} from '../../models/EventModels';
 import LoadingComponent from '../../components/LoadingComponent';
-
+import messaging, {
+  FirebaseMessagingTypes,
+} from '@react-native-firebase/messaging';
 Geocoder.init(process.env.MAP_API_KEY as string);
 
 const HomeScreen = ({navigation}: any) => {
@@ -74,6 +77,17 @@ const HomeScreen = ({navigation}: any) => {
       }
     });
     getEvents();
+
+    messaging().onMessage(
+      async (mess: FirebaseMessagingTypes.RemoteMessage) => {
+        if (Platform.OS === 'android') {
+          ToastAndroid.show(
+            mess.notification?.title ?? 'Fafaf',
+            ToastAndroid.SHORT,
+          );
+        }
+      },
+    );
   }, []);
 
   useEffect(() => {
@@ -286,6 +300,7 @@ const HomeScreen = ({navigation}: any) => {
             <TextComponent text="Get $20 for ticket" />
             <RowComponent justify="flex-start">
               <TouchableOpacity
+                onPress={() => console.log('INTEve')}
                 style={[
                   globalStyles.button,
                   {

@@ -12,8 +12,13 @@ import store from './src/redux/store';
 import AppRouters from './src/navigators/AppRouters';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Host} from 'react-native-portalize';
+import {HandleNotification} from './src/utils/handleNotification';
 
 const App = () => {
+  useEffect(() => {
+    HandleNotification.checkNotificationPermission();
+  }, []);
+
   return (
     <>
       <GestureHandlerRootView style={{flex: 1}}>

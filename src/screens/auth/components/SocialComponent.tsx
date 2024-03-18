@@ -76,7 +76,7 @@ const SocialComponent = () => {
             name: profile.name,
             givenName: profile.firstName,
             familyName: profile.lastName,
-            photoUrl: profile.imageURL,
+            photo: profile.imageURL,
             email: profile.userID,
           };
           const res: any = await authenticationAPI.HandleAuthentication(
