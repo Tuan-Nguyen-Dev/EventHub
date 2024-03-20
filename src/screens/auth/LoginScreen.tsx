@@ -17,6 +17,8 @@ import {appColors} from '../../constants/appColor';
 import {addAuth} from '../../redux/reducers/authReducer';
 import {Validate} from '../../utils/validate';
 import SocialComponent from './components/SocialComponent';
+import {TouchableOpacity} from 'react-native';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 const LoginScreen = ({navigation}: any) => {
   const [email, setEmail] = useState('');
@@ -121,6 +123,10 @@ const LoginScreen = ({navigation}: any) => {
           type="primary"
         />
       </SectionComponent>
+
+      {/* <TouchableOpacity onPress={async () => await GoogleSignin.signOut()}>
+        <TextComponent text="Logout" />
+      </TouchableOpacity> */}
 
       <SocialComponent />
 

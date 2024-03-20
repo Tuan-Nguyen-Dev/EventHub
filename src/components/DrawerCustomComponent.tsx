@@ -20,6 +20,7 @@ import {appColors} from '../constants/appColor';
 import {
   Bookmark2,
   Calendar,
+  Key,
   Logout,
   Message2,
   MessageQuestion,
@@ -31,12 +32,16 @@ import {FlatList} from 'react-native';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {LoginManager} from 'react-native-fbsdk-next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {HandleNotification} from '../utils/handleNotification';
+import AvatarComponent from './AvatarComponent';
 
 const DrawerCustomComponent = ({navigation}: any) => {
-  const user = useSelector(authSelector);
+  const auth = useSelector(authSelector);
   const dispatch = useDispatch();
   const size = 20;
   const color = appColors.gray;
+
+  // console.log('Auth DrawerCustomComponent', auth);
   const profileMenu = [
     {
       key: 'MyProfile',
@@ -80,24 +85,58 @@ const DrawerCustomComponent = ({navigation}: any) => {
     },
   ];
 
-  const handleSignOut = async () => {
+  const handleLogout = async () => {
+    const fcmToken = await AsyncStorage.getItem('fcmtoken');
+    if (fcmToken) {
+      if (auth.fcmTokens && fcmToken.length > 0) {
+        const items = [...auth.fcmTokens];
+        const index = items.findIndex(element => element === fcmToken);
+        if (index !== -1) {
+          items.splice(index, 1);
+        }
+        await HandleNotification.Update(auth.id, items);
+      }
+    }
+
     await GoogleSignin.signOut();
-    await LoginManager.logOut();
+    LoginManager.logOut();
+
+    // clear local storage
+    await AsyncStorage.removeItem('auth');
+
     dispatch(removeAuth({}));
-    await AsyncStorage.clear();
+  };
+  const handleNavigation = (key: string) => {
+    switch (key) {
+      case 'SignOut':
+        handleLogout();
+        break;
+      case 'MyProfile':
+        navigation.navigate('Profile', {
+          screen: 'ProfileScreen',
+          params: {
+            id: auth.id,
+          },
+        });
+
+        break;
+      default:
+        console.log(key);
+        break;
+    }
+    navigation.closeDrawer();
   };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.closeDrawer();
-          navigation.navigate('Profile', {
-            screen: 'ProfileScreen',
-          });
-        }}>
-        {user.photo ? (
-          <Image source={{uri: user.photo}} style={styles.avatar} />
+      <AvatarComponent
+        onPress={() => handleNavigation('MyProfile')}
+        photoURL={auth.photo}
+        name={auth.name ? auth.name : auth.email}
+      />
+      {/* <TouchableOpacity onPress={() => handleNavigation('MyProfile')}>
+        {auth.photo ? (
+          <Image source={{uri: auth.photo}} style={styles.avatar} />
         ) : (
           <View style={[styles.avatar, {backgroundColor: appColors.gray}]}>
             <TextComponent
@@ -105,17 +144,17 @@ const DrawerCustomComponent = ({navigation}: any) => {
               size={24}
               color={appColors.white}
               text={
-                user.name
-                  ? user.name
+                auth.name
+                  ? auth.name
                       .split(' ')
-                      [user.name.split(' ').length - 1].substring(0, 1)
+                      [auth.name.split(' ').length - 1].substring(0, 1)
                   : ''
               }
             />
           </View>
         )}
-        <TextComponent text={user.name} title size={18} />
-      </TouchableOpacity>
+        <TextComponent text={auth.name} title size={18} />
+      </TouchableOpacity> */}
       <FlatList
         showsVerticalScrollIndicator={false}
         data={profileMenu}
@@ -123,14 +162,7 @@ const DrawerCustomComponent = ({navigation}: any) => {
         renderItem={({item, index}) => (
           <RowComponent
             style={[styles.listItem]}
-            onPress={
-              item.key === 'SignOut'
-                ? () => handleSignOut()
-                : () => {
-                    console.log(item.key);
-                    navigation.closeDrawer();
-                  }
-            }>
+            onPress={() => handleNavigation(item.key)}>
             {item.icon}
             <TextComponent text={item.title} styles={styles.listItemText} />
           </RowComponent>

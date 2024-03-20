@@ -60,7 +60,10 @@ const InputComponent = (props: Props) => {
         style={[
           styles.input,
           globalStyles.text,
-          {paddingHorizontal: affix || suffix ? 12 : 0},
+          {
+            paddingHorizontal: affix || suffix ? 12 : 0,
+            textAlignVertical: multiline ? 'top' : 'auto',
+          },
         ]}
         value={value}
         placeholder={placeholder ?? ''}

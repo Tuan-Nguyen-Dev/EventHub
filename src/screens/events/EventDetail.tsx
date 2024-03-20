@@ -44,6 +44,7 @@ const EventDetail = ({navigation, route}: any) => {
 
   const auth: AuthState = useSelector(authSelector);
   const dispatch = useDispatch();
+
   useEffect(() => {
     item && getFollowersById();
   }, [item]);
@@ -248,7 +249,16 @@ const EventDetail = ({navigation, route}: any) => {
                 />
               </View>
             </RowComponent>
-            <RowComponent style={{marginBottom: 20}}>
+            <RowComponent
+              style={{marginBottom: 20}}
+              onPress={() =>
+                navigation.navigate('Profile', {
+                  screen: 'ProfileScreen',
+                  params: {
+                    id: item.authorId,
+                  },
+                })
+              }>
               <Image
                 source={{
                   uri: 'https://khoinguonsangtao.vn/wp-content/uploads/2022/09/hinh-anh-gai-xinh-deo-kinh.jpg',
