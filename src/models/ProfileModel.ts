@@ -5,9 +5,9 @@ export interface ProfileModel {
     familyName: string
     following: string[]
     givenName: string
-    interests: any[]
     name: string
     photoUrl: string
     uid: string
     updatedAt: string
+    interests?: string[];
 }

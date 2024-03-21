@@ -25,10 +25,11 @@ interface Props {
   title?: string;
   children: ReactNode;
   back?: boolean;
+  right?: ReactNode;
 }
 
 const ContainerComponent = (props: Props) => {
-  const {children, isImageBackground, isScroll, title, back} = props;
+  const {children, isImageBackground, isScroll, title, back, right} = props;
 
   const navigation: any = useNavigation();
 
@@ -43,7 +44,7 @@ const ContainerComponent = (props: Props) => {
   const headerComponent = () => {
     return (
       <View style={{flex: 1}}>
-        {(title || back) && (
+        {(title || back || right) && (
           <RowComponent
             style={{
               paddingHorizontal: 16,
@@ -59,16 +60,19 @@ const ContainerComponent = (props: Props) => {
                 <ArrowLeft size={24} color={appColors.text} />
               </TouchableOpacity>
             )}
-            {title ? (
-              <TextComponent
-                size={16}
-                flex={1}
-                text={title}
-                font={fontFamilies.medium}
-              />
-            ) : (
-              <></>
-            )}
+            <View style={{flex: 1}}>
+              {title ? (
+                <TextComponent
+                  size={16}
+                  flex={1}
+                  text={title}
+                  font={fontFamilies.medium}
+                />
+              ) : (
+                <></>
+              )}
+            </View>
+            {right && right}
           </RowComponent>
         )}
 

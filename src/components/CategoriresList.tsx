@@ -5,15 +5,9 @@ import {appColors} from '../constants/appColor';
 import TagComponent from './TagComponent';
 import {Art, KnifeFork, KnifeFork_Color} from '../assets/svgs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {Cateogry} from '../models/Category';
 interface Props {
   isFill?: boolean;
-}
-
-interface Cateogry {
-  icon: ReactNode;
-  color: string;
-  label: string;
-  key: string;
 }
 
 const CategoriresList = (props: Props) => {

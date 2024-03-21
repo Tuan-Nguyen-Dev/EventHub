@@ -252,11 +252,8 @@ const EventDetail = ({navigation, route}: any) => {
             <RowComponent
               style={{marginBottom: 20}}
               onPress={() =>
-                navigation.navigate('Profile', {
-                  screen: 'ProfileScreen',
-                  params: {
-                    id: item.authorId,
-                  },
+                navigation.navigate('ProfileScreen', {
+                  id: item.authorId,
                 })
               }>
               <Image

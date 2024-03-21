@@ -17,6 +17,7 @@ import {AuthState, authSelector} from '../../redux/reducers/authReducer';
 import {globalStyles} from '../../styles/globalStyles';
 import AboutProfile from './components/AboutProfile';
 import EditProfile from './components/EditProfile';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const ProfileScreen = ({navigation, route}: any) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -38,7 +39,7 @@ const ProfileScreen = ({navigation, route}: any) => {
     } else {
       setProfileId(auth.id);
     }
-  }, [route]);
+  }, [route.params]);
 
   useEffect(() => {
     if (profileId) {
@@ -73,7 +74,21 @@ const ProfileScreen = ({navigation, route}: any) => {
   };
 
   return (
-    <ContainerComponent back title="Profile">
+    <ContainerComponent
+      back
+      title={route.params ? '' : 'Profile'}
+      right={
+        <ButtonComponent
+          icons={
+            <MaterialIcons
+              name="more-vert"
+              size={22}
+              color={appColors.text}
+              onPress={() => {}}
+            />
+          }
+        />
+      }>
       {isLoading ? (
         <ActivityIndicator />
       ) : profile ? (

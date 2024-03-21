@@ -55,7 +55,7 @@ const SocialComponent = () => {
       await AsyncStorage.setItem('auth', JSON.stringify(res.data));
       setIsLoading(false);
 
-      console.log(res.data);
+      // console.log(res.data);
     } catch (error) {
       console.log('CHeck error: ' + error);
     }

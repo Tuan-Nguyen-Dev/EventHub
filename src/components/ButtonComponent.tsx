@@ -14,7 +14,7 @@ import {appColors} from '../constants/appColor';
 
 interface Props {
   icons?: ReactNode;
-  text: string;
+  text?: string;
   type?: 'primary' | 'text' | 'link';
   color?: string;
   styles?: StyleProp<ViewStyle>;
@@ -62,30 +62,36 @@ const ButtonComponent = (props: Props) => {
           styles,
         ]}>
         {icons && iconFlex === 'left' && icons}
-        <TextComponent
-          text={text}
-          color={textColor ?? appColors.white}
-          styles={[
-            textStyle,
-            {
-              marginLeft: icons ? 12 : 0,
-              fontSize: 16,
-              textAlign: 'center',
-            },
-            styles,
-          ]}
-          flex={icons && iconFlex === 'right' ? 1 : 0}
-          font={textFont ?? fontFamilies.medium}
-        />
+        {text && (
+          <TextComponent
+            text={text}
+            color={textColor ?? appColors.white}
+            styles={[
+              textStyle,
+              {
+                marginLeft: icons ? 12 : 0,
+                fontSize: 16,
+                textAlign: 'center',
+              },
+              styles,
+            ]}
+            flex={icons && iconFlex === 'right' ? 1 : 0}
+            font={textFont ?? fontFamilies.medium}
+          />
+        )}
+
         {icons && iconFlex === 'right' && icons}
       </TouchableOpacity>
     </View>
   ) : (
     <TouchableOpacity onPress={onPress}>
-      <TextComponent
-        text={text}
-        color={type === 'link' ? appColors.link : appColors.text}
-      />
+      {icons && icons}
+      {text && (
+        <TextComponent
+          text={text}
+          color={type === 'link' ? appColors.link : appColors.text}
+        />
+      )}
     </TouchableOpacity>
   );
 };
