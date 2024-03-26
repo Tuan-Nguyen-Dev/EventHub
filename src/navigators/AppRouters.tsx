@@ -33,7 +33,11 @@ const AppRouters = () => {
   }, []);
 
   useEffect(() => {
-    UserHandle.getFollowersById(auth.id, dispatch);
+    console.log('Auth app router', auth);
+    if (auth.id) {
+      UserHandle.getFollowersById(auth.id, dispatch);
+      UserHandle.getFollowingByUid(auth.id, dispatch);
+    }
   }, [auth.id]);
   const handleGetDatas = async () => {
     await checkLogin();

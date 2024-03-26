@@ -1,4 +1,11 @@
-import {View, Text, StyleProp, ViewStyle, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleProp,
+  ViewStyle,
+  TouchableOpacity,
+  TextStyle,
+} from 'react-native';
 import React, {ReactNode} from 'react';
 import {globalStyles} from '../styles/globalStyles';
 import TextComponent from './TextComponent';
@@ -12,10 +19,11 @@ interface Props {
   bgColor?: string;
   textColor?: string;
   style?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>;
 }
 
 const TagComponent = (props: Props) => {
-  const {label, icon, textColor, bgColor, onPress, style} = props;
+  const {label, icon, textColor, bgColor, onPress, style, textStyle} = props;
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -31,7 +39,7 @@ const TagComponent = (props: Props) => {
       <TextComponent
         font={fontFamilies.medium}
         text={label}
-        styles={{marginLeft: icon ? 8 : 0}}
+        styles={[{marginLeft: icon ? 8 : 0}, textStyle]}
         color={
           textColor ? textColor : bgColor ? appColors.white : appColors.gray
         }

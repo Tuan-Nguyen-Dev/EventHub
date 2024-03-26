@@ -11,8 +11,10 @@ import TabBarComponent from './TabBarComponent';
 import EventItem from './EventItem';
 import CartComponent from './CartComponent';
 import AvatarComponent from './AvatarComponent';
+import UserComponent from './UserComponent';
 
 export {
     SpaceComponents, TextComponent, ButtonComponent, InputComponent, ContainerComponent, SectionComponent, RowComponent, CricleComponent, CategoriresList,
-    TabBarComponent, EventItem, CartComponent, AvatarComponent
+    TabBarComponent, EventItem, CartComponent, AvatarComponent,
+    UserComponent
 };

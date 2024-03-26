@@ -5,7 +5,8 @@ export interface AuthState {
     email: string,
     accesstoken: string,
     follow_events: string[],
-    fcmTokens: string[]
+    fcmTokens?: string[],
+    following?: string[]
 }
 
 
@@ -30,11 +31,14 @@ const authSlice = createSlice({
         },
         addFollowedEvent: (state, acction) => {
             state.authData.follow_events = acction.payload
+        },
+        updateFollowing: (state, action) => {
+            state.authData.following = action.payload
         }
     },
 });
 
 export const authReducer = authSlice.reducer;
-export const { addAuth, removeAuth, addFollowedEvent } = authSlice.actions;
+export const { addAuth, removeAuth, addFollowedEvent, updateFollowing } = authSlice.actions;
 
 export const authSelector = (state: any) => state.authReducer.authData;
